@@ -1,2 +1,2 @@
-# Krrish Bot
-<bgcolor>#ffffff</bgcolor>
+Krrish Bot
+the background color is #000000
