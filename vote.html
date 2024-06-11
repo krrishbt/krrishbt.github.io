@@ -59,7 +59,7 @@
     const candidates = ["Candidate 1", "Candidate 2", "Candidate 3"]; // Add your candidates here
     let votes = JSON.parse(localStorage.getItem('votes')) || {};
 
-    function voteForCandidate(candidate) {
+    function voteForCandidate(button, candidate) {
         if (votes.hasOwnProperty(candidate)) {
             alert("You have already voted for this candidate.");
             return;
@@ -68,7 +68,12 @@
         votes[candidate] = (votes[candidate] || 0) + 1;
         localStorage.setItem('votes', JSON.stringify(votes));
 
-        window.close();
+        const buttons = document.querySelectorAll('.candidate-button');
+        buttons.forEach(btn => {
+            btn.disabled = true;
+            btn.classList.add('disabled');
+        });
+        button.innerText = `Voted for ${candidate}`;
     }
 
     function displayCandidates() {
@@ -77,7 +82,7 @@
             const button = document.createElement('button');
             button.innerText = candidate;
             button.className = 'candidate-button';
-            button.addEventListener('click', () => voteForCandidate(candidate));
+            button.addEventListener('click', () => voteForCandidate(button, candidate));
             candidatesList.appendChild(button);
         });
     }
