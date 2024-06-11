@@ -2,21 +2,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Titan Bot Voting Page</title>
+    <title>Main Page</title>
     <style>
         body {
-            margin: 0;
-            padding: 20px;
-            font-family: Arial, sans-serif;
+            background-color: black;
             color: white;
-            background: black;
+            font-family: Arial, sans-serif;
             text-align: center;
+            padding: 50px;
         }
-        h1, h2 {
+        h1 {
             color: #FFD700;
             text-shadow: 2px 2px #333, 4px 4px #222, 6px 6px #111;
         }
-        button, input[type="text"] {
+        button {
             background-color: grey;
             color: white;
             border: none;
@@ -30,7 +29,7 @@
             border-radius: 5px;
             transition: background-color 0.3s;
         }
-        button:hover, input[type="text"]:hover {
+        button:hover {
             background-color: #575757;
         }
         #matrix {
@@ -41,86 +40,21 @@
             height: 100%;
             z-index: -1;
         }
-        #nation-id-form, #candidates-list {
-            display: none;
-        }
-        .candidate-button {
-            margin: 5px;
-        }
-        .disabled {
-            background-color: #333;
-            cursor: not-allowed;
-        }
     </style>
 </head>
 <body>
 
 <canvas id="matrix"></canvas>
 
-<h1>Titan Bot Voting Page</h1>
-
-<div id="vote-section">
-    <button id="start-vote-btn">Start Voting</button>
-
-    <div id="nation-id-form">
-        <h2>Enter Your Nation ID</h2>
-        <input type="text" id="nation-id" placeholder="Nation ID">
-        <button id="submit-nation-id-btn">Continue</button>
-    </div>
-
-    <div id="candidates-list">
-        <h2>Select Your Candidate</h2>
-        <!-- Candidate buttons will be added here dynamically -->
-    </div>
-</div>
-
-<div id="completion-message" style="display: none;">
-    <h2>Voting Completed!</h2>
+<div class="content">
+    <h1>Welcome</h1>
+    <button id="start-button">Start Voting</button>
 </div>
 
 <script>
-    const candidates = ["Candidate 1", "Candidate 2", "Candidate 3"]; // Add your candidates here
-
-    const startVoteBtn = document.getElementById('start-vote-btn');
-    const nationIdForm = document.getElementById('nation-id-form');
-    const submitNationIdBtn = document.getElementById('submit-nation-id-btn');
-    const candidatesList = document.getElementById('candidates-list');
-    const completionMessage = document.getElementById('completion-message');
-
-    startVoteBtn.addEventListener('click', () => {
-        startVoteBtn.style.display = 'none';
-        nationIdForm.style.display = 'block';
+    document.getElementById('start-button').addEventListener('click', function() {
+        window.location.href = 'vote.html';
     });
-
-    submitNationIdBtn.addEventListener('click', () => {
-        const nationId = document.getElementById('nation-id').value;
-        if (nationId.trim() === "") {
-            alert("Please enter your Nation ID");
-            return;
-        }
-        nationIdForm.style.display = 'none';
-        candidatesList.style.display = 'block';
-        displayCandidates();
-    });
-
-    function displayCandidates() {
-        candidates.forEach(candidate => {
-            const button = document.createElement('button');
-            button.innerText = candidate;
-            button.className = 'candidate-button';
-            button.addEventListener('click', () => voteForCandidate(button));
-            candidatesList.appendChild(button);
-        });
-    }
-
-    function voteForCandidate(button) {
-        const buttons = document.querySelectorAll('.candidate-button');
-        buttons.forEach(btn => {
-            btn.disabled = true;
-            btn.classList.add('disabled');
-        });
-        completionMessage.style.display = 'block';
-    }
 
     const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
