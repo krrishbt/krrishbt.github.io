@@ -70,11 +70,12 @@
 
         const buttons = document.querySelectorAll('.candidate-button');
         buttons.forEach(btn => {
-            btn.disabled = true;
-            btn.classList.add('disabled');
+            btn.parentNode.removeChild(btn);
         });
-        votedCandidateSpan.innerText = candidate;
-        completionMessage.style.display = 'block';
+
+        const message = document.createElement('h2');
+        message.textContent = `You have successfully voted for ${candidate}`;
+        document.getElementById('candidates-list').appendChild(message);
     }
 
     function displayCandidates() {
