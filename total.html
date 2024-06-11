@@ -5,13 +5,14 @@
     <title>Total Votes</title>
     <style>
         body {
-            background-color: black;
-            color: white;
+            margin: 0;
+            padding: 20px;
             font-family: Arial, sans-serif;
+            color: white;
+            background: black;
             text-align: center;
-            padding: 50px;
         }
-        h1 {
+        h1, h2 {
             color: #FFD700;
             text-shadow: 2px 2px #333, 4px 4px #222, 6px 6px #111;
         }
@@ -45,14 +46,18 @@
     </tbody>
 </table>
 
+<button id="reset-button">Reset</button>
+
 <script>
-    const votes = JSON.parse(localStorage.getItem('votes')) || {};
+    // Retrieve votes from local storage
+    let votes = JSON.parse(localStorage.getItem('votes')) || {};
 
     // Function to display votes
     function displayVotes() {
         const voteList = document.getElementById('vote-list');
         voteList.innerHTML = '';
 
+        // Loop through votes and display in table
         Object.keys(votes).forEach(candidate => {
             const row = document.createElement('tr');
             const nameCell = document.createElement('td');
@@ -65,8 +70,19 @@
         });
     }
 
-    // Display votes when the page loads
+    // Call function to display votes
     displayVotes();
+
+    // Reset button functionality
+    const resetButton = document.getElementById('reset-button');
+    resetButton.addEventListener('click', () => {
+        // Clear votes from local storage
+        localStorage.removeItem('votes');
+        // Reset votes object
+        votes = {};
+        // Refresh the display
+        displayVotes();
+    });
 </script>
 
 </body>
