@@ -27,23 +27,6 @@
         th {
             background-color: #333;
         }
-        button {
-            background-color: grey;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #575757;
-        }
     </style>
 </head>
 <body>
@@ -62,48 +45,28 @@
     </tbody>
 </table>
 
-<button id="reset-button">Reset Votes and Used IDs</button>
-
 <script>
-    const votes = JSON.parse(localStorage.getItem('votes')) || {};
+    const allVotes = JSON.parse(localStorage.getItem('allVotes')) || {};
 
-    // Function to display votes
+    // Function to display all votes
     function displayVotes() {
         const voteList = document.getElementById('vote-list');
         voteList.innerHTML = '';
 
-        // Convert votes object to array of objects
-        const candidates = Object.keys(votes).map(candidate => ({
-            name: candidate,
-            votes: votes[candidate]
-        }));
-
-        // Sort candidates by votes (descending order)
-        candidates.sort((a, b) => b.votes - a.votes);
-
-        // Display sorted candidates
-        candidates.forEach(candidate => {
+        Object.keys(allVotes).forEach(candidate => {
             const row = document.createElement('tr');
             const nameCell = document.createElement('td');
-            nameCell.textContent = candidate.name;
+            nameCell.textContent = candidate;
             const votesCell = document.createElement('td');
-            votesCell.textContent = candidate.votes;
+            votesCell.textContent = allVotes[candidate];
             row.appendChild(nameCell);
             row.appendChild(votesCell);
             voteList.appendChild(row);
         });
     }
 
-    // Display votes when the page loads
+    // Display all votes when the page loads
     displayVotes();
-
-    // Reset votes and used IDs when the reset button is clicked
-    document.getElementById('reset-button').addEventListener('click', function() {
-        localStorage.removeItem('votes');
-        localStorage.removeItem('usedIds');
-        alert("Votes and Used IDs have been reset.");
-        location.reload(); // Refresh the page to reflect the changes
-    });
 </script>
 
 </body>
