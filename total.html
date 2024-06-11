@@ -62,7 +62,7 @@
     </tbody>
 </table>
 
-<button id="reset-button">Reset Used IDs</button>
+<button id="reset-button">Reset Votes and Used IDs</button>
 
 <script>
     const votes = JSON.parse(localStorage.getItem('votes')) || {};
@@ -87,10 +87,12 @@
     // Display votes when the page loads
     displayVotes();
 
-    // Reset used IDs when the reset button is clicked
+    // Reset votes and used IDs when the reset button is clicked
     document.getElementById('reset-button').addEventListener('click', function() {
+        localStorage.removeItem('votes');
         localStorage.removeItem('usedIds');
-        alert("Used IDs have been reset.");
+        alert("Votes and Used IDs have been reset.");
+        location.reload(); // Refresh the page to reflect the changes
     });
 </script>
 
