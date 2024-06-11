@@ -53,7 +53,18 @@
 
 <script>
     document.getElementById('start-button').addEventListener('click', function() {
-        window.location.href = 'vote.html';
+        const nationId = prompt("Please enter your nation ID:");
+        if (nationId !== null && nationId !== "") {
+            // Check if nation ID has been used before
+            const usedIds = JSON.parse(localStorage.getItem('usedIds')) || [];
+            if (usedIds.includes(nationId)) {
+                alert("You have already used this nation ID.");
+            } else {
+                usedIds.push(nationId);
+                localStorage.setItem('usedIds', JSON.stringify(usedIds));
+                window.location.href = `vote.html?nationId=${nationId}`;
+            }
+        }
     });
 
     const canvas = document.getElementById('matrix');
