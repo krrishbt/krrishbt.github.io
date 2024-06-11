@@ -62,7 +62,7 @@
     </tbody>
 </table>
 
-<button id="reset-button">Reset</button>
+<button id="reset-button">Reset Votes and Used IDs</button>
 
 <script>
     const votes = JSON.parse(localStorage.getItem('votes')) || {};
@@ -72,12 +72,22 @@
         const voteList = document.getElementById('vote-list');
         voteList.innerHTML = '';
 
-        Object.keys(votes).forEach(candidate => {
+        // Convert votes object to array of objects
+        const candidates = Object.keys(votes).map(candidate => ({
+            name: candidate,
+            votes: votes[candidate]
+        }));
+
+        // Sort candidates by votes (descending order)
+        candidates.sort((a, b) => b.votes - a.votes);
+
+        // Display sorted candidates
+        candidates.forEach(candidate => {
             const row = document.createElement('tr');
             const nameCell = document.createElement('td');
-            nameCell.textContent = candidate;
+            nameCell.textContent = candidate.name;
             const votesCell = document.createElement('td');
-            votesCell.textContent = votes[candidate];
+            votesCell.textContent = candidate.votes;
             row.appendChild(nameCell);
             row.appendChild(votesCell);
             voteList.appendChild(row);
