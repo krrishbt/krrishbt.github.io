@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Total Votes</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #FFD700;
+            text-shadow: 2px 2px #333, 4px 4px #222, 6px 6px #111;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #FFD700;
+            padding: 10px;
+        }
+        th {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Total Votes</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Candidate</th>
+            <th>Votes</th>
+        </tr>
+    </thead>
+    <tbody id="vote-list">
+        <!-- Candidate votes will be added here dynamically -->
+    </tbody>
+</table>
+
+<script>
+    const votes = JSON.parse(localStorage.getItem('votes')) || {};
+
+    // Function to display votes
+    function displayVotes() {
+        const voteList = document.getElementById('vote-list');
+        voteList.innerHTML = '';
+
+        Object.keys(votes).forEach(candidate => {
+            const row = document.createElement('tr');
+            const nameCell = document.createElement('td');
+            nameCell.textContent = candidate;
+            const votesCell = document.createElement('td');
+            votesCell.textContent = votes[candidate];
+            row.appendChild(nameCell);
+            row.appendChild(votesCell);
+            voteList.appendChild(row);
+        });
+    }
+
+    // Display votes when the page loads
+    displayVotes();
+</script>
+
+</body>
+</html>
