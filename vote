@@ -51,6 +51,9 @@
             background-color: #333;
             cursor: not-allowed;
         }
+        #completion-message {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -74,18 +77,21 @@
     </div>
 </div>
 
-<div id="completion-message" style="display: none;">
+<div id="completion-message">
     <h2>Voting Completed!</h2>
+    <p>You voted for: <span id="voted-candidate"></span></p>
 </div>
 
 <script>
     const candidates = ["Candidate 1", "Candidate 2", "Candidate 3"]; // Add your candidates here
+    const votes = { "Candidate 1": 0, "Candidate 2": 0, "Candidate 3": 0 };
 
     const startVoteBtn = document.getElementById('start-vote-btn');
     const nationIdForm = document.getElementById('nation-id-form');
     const submitNationIdBtn = document.getElementById('submit-nation-id-btn');
     const candidatesList = document.getElementById('candidates-list');
     const completionMessage = document.getElementById('completion-message');
+    const votedCandidateSpan = document.getElementById('voted-candidate');
 
     startVoteBtn.addEventListener('click', () => {
         startVoteBtn.style.display = 'none';
@@ -108,17 +114,19 @@
             const button = document.createElement('button');
             button.innerText = candidate;
             button.className = 'candidate-button';
-            button.addEventListener('click', () => voteForCandidate(button));
+            button.addEventListener('click', () => voteForCandidate(button, candidate));
             candidatesList.appendChild(button);
         });
     }
 
-    function voteForCandidate(button) {
+    function voteForCandidate(button, candidate) {
+        votes[candidate] += 1;
         const buttons = document.querySelectorAll('.candidate-button');
         buttons.forEach(btn => {
             btn.disabled = true;
             btn.classList.add('disabled');
         });
+        votedCandidateSpan.innerText = candidate;
         completionMessage.style.display = 'block';
     }
 
