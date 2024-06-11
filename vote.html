@@ -2,94 +2,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voting Page</title>
+    <title>Vote Page</title>
     <style>
-        body {
-            background-color: black;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-        }
-        h1 {
-            color: #FFD700;
-            text-shadow: 2px 2px #333, 4px 4px #222, 6px 6px #111;
-        }
-        button {
-            background-color: grey;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #575757;
-        }
-        #matrix {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
+        /* Your CSS styles here */
     </style>
 </head>
 <body>
 
-<canvas id="matrix"></canvas>
+<h1>Vote for Your Candidate</h1>
 
-<div id="vote-section">
-    <h1>Vote for Your Candidate</h1>
-
-    <div id="candidates-list">
-        <h2>Select Your Candidate</h2>
-        <!-- Candidate buttons will be added here dynamically -->
-    </div>
-</div>
+<form id="vote-form">
+    <label for="candidate">Select your candidate:</label>
+    <select id="candidate" name="candidate">
+        <!-- Options will be added here dynamically -->
+    </select>
+    <br>
+    <label for="nation-id">Nation ID:</label>
+    <input type="text" id="nation-id" name="nation-id" required>
+    <br>
+    <button type="submit">Vote</button>
+</form>
 
 <script>
-    const candidates = ["Candidate 1", "Candidate 2", "Candidate 3"]; // Add your candidates here
-    let votes = JSON.parse(localStorage.getItem('votes')) || {};
+    const candidates = ["Candidate 1", "Candidate 2", "Candidate 3"]; // Update with your candidate names
+    const form = document.getElementById('vote-form');
+    const select = document.getElementById('candidate');
+    const nationIdInput = document.getElementById('nation-id');
 
-    function voteForCandidate(button, candidate) {
-        if (votes.hasOwnProperty(candidate)) {
+    // Populate the select options with candidates
+    candidates.forEach(candidate => {
+        const option = document.createElement('option');
+        option.textContent = candidate;
+        select.appendChild(option);
+    });
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const selectedCandidate = select.value;
+        const nationId = nationIdInput.value;
+
+        // Check if nation ID is not empty
+        if (nationId.trim() === '') {
+            alert("Please enter your nation ID.");
             return;
         }
-        
-        votes[candidate] = (votes[candidate] || 0) + 1;
+
+        // Check if the user has already voted
+        const usedIds = JSON.parse(localStorage.getItem('usedIds')) || [];
+        if (usedIds.includes(nationId)) {
+            alert("You have already voted.");
+            return;
+        }
+
+        // Register the vote
+        const votes = JSON.parse(localStorage.getItem('votes')) || {};
+        votes[selectedCandidate] = (votes[selectedCandidate] || 0) + 1;
         localStorage.setItem('votes', JSON.stringify(votes));
 
-        const buttons = document.querySelectorAll('.candidate-button');
-        buttons.forEach(btn => {
-            btn.disabled = true;
-            btn.classList.add('disabled');
-        });
-        button.innerText = `Voted for ${candidate}`;
-    }
+        // Add nation ID to used IDs
+        usedIds.push(nationId);
+        localStorage.setItem('usedIds', JSON.stringify(usedIds));
 
-    function displayCandidates() {
-        const candidatesList = document.getElementById('candidates-list');
-        candidates.forEach(candidate => {
-            const button = document.createElement('button');
-            button.innerText = candidate;
-            button.className = 'candidate-button';
-            button.addEventListener('click', () => voteForCandidate(button, candidate));
-            candidatesList.appendChild(button);
-        });
-    }
-
-    displayCandidates();
-
-    // Your matrix effect script
-
+        alert("Thank you for voting!");
+        window.location.href = 'completed.html'; // Redirect to completion page
+    });
 </script>
 
 </body>
