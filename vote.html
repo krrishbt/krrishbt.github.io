@@ -53,54 +53,35 @@
         <option value="Candidate 3">Candidate 3</option>
     </select>
     <br>
-    <label for="nation-id">Nation ID:</label>
-    <input type="text" id="nation-id" name="nation-id" required>
-    <br>
     <button type="submit">Vote</button>
 </form>
 
 <script>
     const form = document.getElementById('vote-form');
-    const nationIdInput = document.getElementById('nation-id');
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
 
         const selectedCandidate = document.getElementById('candidate').value;
-        const nationId = nationIdInput.value.trim();
 
-        // Check if nation ID is not empty
-        if (nationId === '') {
-            alert("Please enter your nation ID.");
-            return;
-        }
-
-        // Check if the user has already voted
-        const usedIds = JSON.parse(localStorage.getItem('usedIds')) || [];
-        if (usedIds.includes(nationId)) {
-            alert("You have already voted.");
-            return;
-        }
-
-        // Register the vote
-        const allVotes = JSON.parse(localStorage.getItem('allVotes')) || {};
-        allVotes[selectedCandidate] = (allVotes[selectedCandidate] || 0) + 1;
-        localStorage.setItem('allVotes', JSON.stringify(allVotes));
-
-        // Add nation ID to used IDs
-        usedIds.push(nationId);
-        localStorage.setItem('usedIds', JSON.stringify(usedIds));
-
-        alert("Thank you for voting!");
-        window.location.href = 'completed.html'; // Redirect to completion page
+        fetch('http://localhost:3000/vote', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ candidate: selectedCandidate })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("Thank you for voting!");
+            window.location.href = 'completed.html';
+        })
+        .catch(error => console.error('Error:', error));
     });
 
-    // Listen for the reset event from local storage and reload the page
     window.addEventListener('storage', function(event) {
         if (event.key === 'resetVotes') {
-            localStorage.removeItem('allVotes');
-            localStorage.removeItem('usedIds');
-            location.reload();
+            window.location.reload();
         }
     });
 </script>
