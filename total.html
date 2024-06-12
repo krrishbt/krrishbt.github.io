@@ -62,26 +62,20 @@
     </tbody>
 </table>
 
-<button id="reset-button">Reset Votes and Used IDs</button>
+<button id="reset-button">Reset Votes</button>
 
 <script>
-    const allVotes = JSON.parse(localStorage.getItem('allVotes')) || {};
-
-    // Function to display all votes
-    function displayVotes() {
+    function displayVotes(votes) {
         const voteList = document.getElementById('vote-list');
         voteList.innerHTML = '';
 
-        // Convert allVotes object to array of objects
-        const candidates = Object.keys(allVotes).map(candidate => ({
+        const candidates = Object.keys(votes).map(candidate => ({
             name: candidate,
-            votes: allVotes[candidate]
+            votes: votes[candidate]
         }));
 
-        // Sort candidates by votes (descending order)
         candidates.sort((a, b) => b.votes - a.votes);
 
-        // Display sorted candidates
         candidates.forEach(candidate => {
             const row = document.createElement('tr');
             const nameCell = document.createElement('td');
@@ -94,24 +88,30 @@
         });
     }
 
-    // Display votes when the page loads
-    displayVotes();
+    fetch('http://localhost:3000/votes')
+        .then(response => response.json())
+        .then(data => displayVotes(data))
+        .catch(error => console.error('Error:', error));
 
-    // Reset votes and used IDs when the reset button is clicked
     document.getElementById('reset-button').addEventListener('click', function() {
-        localStorage.setItem('resetVotes', true);
-        localStorage.removeItem('allVotes');
-        localStorage.removeItem('usedIds');
-        alert("Votes and Used IDs have been reset.");
-        location.reload(); // Refresh the page to reflect the changes
+        fetch('http://localhost:3000/reset', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            localStorage.setItem('resetVotes', 'true');
+            alert('Votes have been reset.');
+            displayVotes({});
+        })
+        .catch(error => console.error('Error:', error));
     });
 
-    // Listen for the reset event from local storage and reload the page
     window.addEventListener('storage', function(event) {
         if (event.key === 'resetVotes') {
-            localStorage.removeItem('allVotes');
-            localStorage.removeItem('usedIds');
-            location.reload();
+            displayVotes({});
         }
     });
 </script>
