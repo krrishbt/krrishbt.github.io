@@ -101,6 +101,15 @@
         alert("Thank you for voting!");
         window.location.href = 'completed.html'; // Redirect to completion page
     });
+
+    // Listen for the reset event from local storage and reload the page
+    window.addEventListener('storage', function(event) {
+        if (event.key === 'resetVotes') {
+            localStorage.removeItem('allVotes');
+            localStorage.removeItem('usedIds');
+            location.reload();
+        }
+    });
 </script>
 
 </body>
