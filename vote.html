@@ -4,7 +4,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vote Page</title>
     <style>
-        /* Your CSS styles here */
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #FFD700;
+        }
+        form {
+            margin-top: 20px;
+        }
+        label, select, input {
+            display: block;
+            margin: 10px auto;
+            font-size: 1.2em;
+        }
+        button {
+            background-color: grey;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #575757;
+        }
     </style>
 </head>
 <body>
@@ -40,10 +74,10 @@
         event.preventDefault();
 
         const selectedCandidate = select.value;
-        const nationId = nationIdInput.value;
+        const nationId = nationIdInput.value.trim();
 
         // Check if nation ID is not empty
-        if (nationId.trim() === '') {
+        if (nationId === '') {
             alert("Please enter your nation ID.");
             return;
         }
@@ -56,9 +90,9 @@
         }
 
         // Register the vote
-        const votes = JSON.parse(localStorage.getItem('votes')) || {};
-        votes[selectedCandidate] = (votes[selectedCandidate] || 0) + 1;
-        localStorage.setItem('votes', JSON.stringify(votes));
+        const allVotes = JSON.parse(localStorage.getItem('allVotes')) || {};
+        allVotes[selectedCandidate] = (allVotes[selectedCandidate] || 0) + 1;
+        localStorage.setItem('allVotes', JSON.stringify(allVotes));
 
         // Add nation ID to used IDs
         usedIds.push(nationId);
