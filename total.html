@@ -99,10 +99,20 @@
 
     // Reset votes and used IDs when the reset button is clicked
     document.getElementById('reset-button').addEventListener('click', function() {
+        localStorage.setItem('resetVotes', true);
         localStorage.removeItem('allVotes');
         localStorage.removeItem('usedIds');
         alert("Votes and Used IDs have been reset.");
         location.reload(); // Refresh the page to reflect the changes
+    });
+
+    // Listen for the reset event from local storage and reload the page
+    window.addEventListener('storage', function(event) {
+        if (event.key === 'resetVotes') {
+            localStorage.removeItem('allVotes');
+            localStorage.removeItem('usedIds');
+            location.reload();
+        }
     });
 </script>
 
